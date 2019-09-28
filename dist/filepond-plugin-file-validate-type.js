@@ -31,9 +31,20 @@
       mimeType,
       wildcard
     ) {
-      var mimeTypeGroup = (/^[^/]+/.exec(mimeType) || []).pop(); // image/png -> image
-      var wildcardGroup = wildcard.slice(0, -2); // image/* -> image
-      return mimeTypeGroup === wildcardGroup;
+      // const mimeTypeGroup = (/^[^/]+/.exec(mimeType) || []).pop(); // image/png -> image
+      // const wildcardGroup = wildcard.slice(0, -2); // image/* -> image
+      // return mimeTypeGroup === wildcardGroup;
+      var mimeTypeGroup = mimeType.split(/(\/(?!$))/);
+      var wildcardGroup = wildcard.split(/(\/(?!$))/);
+
+      if (wildcardGroup.length === 3) {
+        if (wildcardGroup[0] === mimeTypeGroup[0]) {
+          return mimeTypeGroup[2].search(wildcardGroup[2]) === 0;
+        }
+        return false;
+      }
+
+      return false;
     };
 
     var isValidMimeType = function isValidMimeType(
